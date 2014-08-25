@@ -1,0 +1,9 @@
+# text editor files
+*.swp
+
+# compilation files
+*.o
+*.hi
+Life
+
+Reflection.txt
