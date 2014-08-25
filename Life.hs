@@ -70,14 +70,6 @@ instance Comonad Z2 where
                    a
                    (unfoldr ((split <$>) . traverse forth) a)
 
-alignZ :: Z (Z a) -> Z (Z a)
-alignZ (Z ls c rs) = Z (map (align c) ls) c (map (align c) rs)
-
-align :: Z a -> Z a -> Z a
-align (Z ls c rs) z' = Z ls' c' rs'
-  where (ls',crs) = (splitAt (length ls) $ fromZ z')
-        (c':rs') = crs
-
 instance Foldable Z2 where
     foldMap f (Z2 z) = foldMap (foldMap f) z
 
@@ -89,7 +81,6 @@ main = do
     (x:y:gens:file:[]) <- getArgs
     board <- mkBoard (read x, read y) <$> getStdGen
     let generations = take (read gens) $ iterate (extend live) board
-    -- mapM_ (putStrLn . (++ "\n\n\n") . showBoard) generations
     let images = map (boardToImage (read x,read y)) generations
     let triples = zip3 (repeat greyPalette) (repeat 10) images
     let result = writeGifImages file LoopingNever triples
